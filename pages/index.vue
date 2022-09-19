@@ -16,8 +16,10 @@
       </button>
     </div>
 
+    <Loading v-if="$fetchState.pending" />
+
     <!-- Movies -->
-    <MovieCard :listMovie="movies" />
+    <MovieCard v-else :list-movie="movies" />
   </div>
 </template>
 
@@ -34,9 +36,9 @@ export default {
   async fetch() {
     await this.getMovies()
   },
+  fetchDelay: 1000,
   methods: {
     async getSearchMovies() {
-      this.$nuxt.$loading.start()
       const res = await axios
         .get(
           `https://api.themoviedb.org/3/search/movie?api_key=637229d93973db648ccec07e3acd8553&language=en-US&page=1&query=${this.search}`
@@ -45,10 +47,8 @@ export default {
         .catch((error) => alert(error.message))
       this.movies = []
       res.results.forEach((element) => {
-        // console.log(element)
         this.movies.push(element)
       })
-      this.$nuxt.$loading.finish()
     },
     async getMovies() {
       if (this.search.length > 0) {
@@ -73,6 +73,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.loading {
+  padding-top: 120px;
+  align-items: flex-start;
+}
 .search {
   display: flex;
   padding: 32px 16px;
