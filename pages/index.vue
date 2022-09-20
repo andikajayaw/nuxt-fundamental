@@ -26,7 +26,7 @@
 <script>
 import axios from 'axios'
 export default {
-  loading: false,
+  // loading: false,
   data() {
     return {
       movies: [],
